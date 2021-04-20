@@ -1,4 +1,6 @@
-# exchange-data-collector
+# data-collector
+
+Infrastructure that collects various data(features, time series) to one platform.
 
 ## setup & build
 ```
