@@ -1,0 +1,11 @@
+.vscode
+grafana
+pgadmin
+postgres/data
+.env
+*.egg-info
+
+
+# Added by cargo
+
+/target
