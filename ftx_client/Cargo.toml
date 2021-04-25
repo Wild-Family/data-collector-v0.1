@@ -7,9 +7,15 @@ version = "0.1.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+futures = "0.3"
 hmac = "0.10.1"
 reqwest = {version = "0.11", features = ["json"]}
 serde = {version = "1.0", features = ["derive"]}
 serde_json = "1.0"
 sha2 = "0.9.2"
 url = "2.2.0"
+chrono = { version = "0.4", features = ["serde", "rustc-serialize"] }
+
+# TODO fix not to use real FTX API when test and remove these crates 
+dotenv = "0.15.0"
+dotenv_codegen = "0.15.0"
