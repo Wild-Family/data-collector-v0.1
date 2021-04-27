@@ -81,8 +81,8 @@ impl FtxClient {
         market_name: &str,
         resolution: u32,
         limit: u32,
-        start_time: DateTime<Local>,
-        end_time: DateTime<Local>,
+        start_time: Option<DateTime<Local>>,
+        end_time: Option<DateTime<Local>>,
     ) -> Result<Vec<FtxTradeData>, Box<dyn std::error::Error>> {
         // Create HMAC
         let timestamp = Local::now().timestamp_subsec_micros();
@@ -104,15 +104,17 @@ impl FtxClient {
 
         println!("sign_payload: {}", sign_payload);
 
-        let query = [
-            ("resolution", &resolution.to_string()),
-            ("limit", &limit.to_string()),
-            (
-                "start_time",
-                &start_time.timestamp_subsec_millis().to_string(),
-            ),
-            ("end_time", &end_time.timestamp_subsec_millis().to_string()),
+        let mut query: Vec<(String, String)> = vec![
+            ("resolution".to_string(), resolution.to_string()),
+            ("limit".to_string(), limit.to_string()),
         ];
+
+        if let Some(start_time) = start_time {
+            query.push(("start_time".to_string(), start_time.timestamp_subsec_millis().to_string()))
+        }
+        if let Some(end_time) = end_time {
+            query.push(("end_time".to_string(), end_time.timestamp_subsec_millis().to_string()))
+        }
 
         // Make a request
         let response = reqwest::Client::new()
@@ -123,6 +125,8 @@ impl FtxClient {
             .header("FTX-TS", timestamp)
             .send()
             .await?;
+        
+        println!("{:#?}", response.status());
 
         let value = response.json::<Value>().await?;
         let result = &value["result"];

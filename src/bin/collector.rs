@@ -12,13 +12,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let ftx_client = FtxClient::new(ftx_api_key, ftx_api_secret);
 
-    let market_datas = ftx_client.get_markets().await?;
+    let trade_datas = ftx_client.get_trades("BTC-PERP", 300, 264, None, None).await?;
 
-    for (k, _v) in &market_datas {
-        println!("{}", k);
-    }
-
-    println!("{:?}", market_datas["SOL-PERP"]);
+    println!("{:#?}", trade_datas);
 
     Ok(())
 }
